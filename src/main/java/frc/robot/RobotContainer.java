@@ -1,0 +1,374 @@
+
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.MathUtil;
+/*import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;*/
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Hopper;
+//import frc.robot.subsystems.Climb;
+
+import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+//import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+//import java.util.List;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+/*import edu.wpi.first.wpilibj.PS4Controller.Button;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;*/
+import frc.robot.Constants.OIConstants;
+//import frc.robot.commands.LeftAuto;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.AutoDriveForward;
+import frc.robot.commands.ShooterCommand;
+//import frc.robot.commands.MiddleAuto;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climb;
+
+/*
+ * This class is where the bulk of the robot should be declared.  Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+ * (including subsystems, commands, and button mappings) should be declared here.
+ */
+@SuppressWarnings("unused")
+public class RobotContainer {
+ 
+  // The robot's subsystems
+  final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final Hopper m_Hopper = new Hopper();
+  private final Shooter shooterMotor = new Shooter();
+ // private final Shooter shooterSusanMotor = new Shooter();
+ // private final Shooter shooterArchMotor = new Shooter();
+  //private final Hopper HopperExtend = new Hopper();
+  //private final Hopper HopperDeExtend = new Hopper();
+ // private final Hopper HopperRoller = new Hopper();
+  private final Climb m_climb = new Climb();
+
+ 
+  private double climbmult = 1;
+
+  // The driver's controller
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  // The subsystem controller
+  CommandXboxController m_subsystemController = new CommandXboxController(OIConstants.kSubsystemControllerPort);
+
+  // Controller Buttons
+  Trigger xButton = m_driverController.x();
+  
+//
+ 
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+  public RobotContainer() {
+
+    // tell pathplanner what our shooter command is
+    NamedCommands.registerCommand("Shoot", new ShooterCommand(shooterMotor, 1));
+
+    // Configure the button bindings
+    configureButtonBindings();
+
+    // Configure default commands
+
+        m_robotDrive.setDefaultCommand(
+            // The left stick controls translation of the robot.
+            // Turning is controlled by the X axis of the right stick.
+            new RunCommand(
+                () -> m_robotDrive.drive(
+                    MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                    MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                    true,
+                    1),
+                m_robotDrive));
+
+        /*
+        SendableChooser<String> autoChooser = new SendableChooser<>();
+        autoChooser.setDefaultOption("Default Auto", "Default");
+        autoChooser.addOption("Option A", "OptionA");
+        autoChooser.addOption("Option B", "OptionB");
+        SmartDashboard.putData("Auto Selector", autoChooser);
+        */
+
+    }
+
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+   * subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+   * passing it to a
+   * {@link JoystickButton}.
+   */
+  private void configureButtonBindings() {
+     //old event based xboxcontroller
+   /*  new JoystickButton(m_driverController, Button.kR1.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));*/
+    
+    //pass in swerve and multiplier    
+
+    //DRIVER CONTROLLERS
+    m_driverController.x().whileTrue(
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true,
+                0.25),
+            m_robotDrive)
+    );
+
+    m_driverController.y().whileTrue(
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true,
+                0.5),
+            m_robotDrive)
+    );
+
+      m_driverController.b().whileTrue(
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true,
+                0.75),
+            m_robotDrive)
+    );
+    /* 
+
+    m_driverController.a().whileTrue(
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true,
+                0.1),
+            m_robotDrive)
+    );
+*/
+    m_driverController.a().whileTrue(
+        new StartEndCommand(
+            () -> m_robotDrive.setX(), 
+            () -> m_robotDrive.setX(), 
+            m_robotDrive)
+    );
+
+
+//--------------------------SUBSYSTEM CONTROLLER!!!!!!!!!!!---------------------------
+
+//================================CLIMB===============================
+// CLIMB works i think
+
+   m_subsystemController.a().whileTrue(
+        new StartEndCommand(
+            () -> m_climb.useClimb(.5), 
+            () -> m_climb.useClimb(0), 
+            m_climb)
+    );
+  
+m_subsystemController.b().whileTrue(
+        new StartEndCommand(
+            () -> m_climb.useClimb(-.5), 
+            () -> m_climb.useClimb(0), 
+            m_climb)
+    ); 
+//============================================================================
+    
+//=======================================HOPPER===============================
+    // Hopper extension control
+    // Might need to be modified
+    //changed half power to quarter pwr because testing
+
+    // changed hopper to extend 
+     m_subsystemController.rightBumper().whileTrue(
+        new StartEndCommand(
+            () -> m_Hopper.extend(0.25), 
+            () -> m_Hopper.extend(0), 
+            m_Hopper)
+    );
+
+    // this helps deextend
+    m_subsystemController.leftBumper().whileTrue(   
+        new StartEndCommand(
+            () -> m_Hopper.extend(-0.25), 
+            () -> m_Hopper.extend(0), 
+            m_Hopper)
+    );
+    
+     m_subsystemController.povUp().whileTrue(   
+        new StartEndCommand(
+           () -> m_Hopper.intake(-1), 
+            () -> m_Hopper.intake(0), 
+            m_Hopper)
+    );
+
+    //wahhh
+    m_subsystemController.povDown().whileTrue(   
+        new StartEndCommand(
+            () -> m_Hopper.intake(1), 
+            () -> m_Hopper.intake(0), 
+            m_Hopper)
+    );
+
+ //==========================================================================
+
+//=========================WORKS AS A SHOOTER I THINK========================
+  
+       m_subsystemController.povRight().whileTrue(
+        new StartEndCommand(
+            () -> shooterMotor.useShooter(10),
+            () -> shooterMotor.useShooter(0), 
+            shooterMotor)
+    );
+    // they see me rollin
+      m_subsystemController.x().whileTrue(
+        new StartEndCommand(
+            () -> m_Hopper.rollers(1),
+            () -> m_Hopper.rollers(0), 
+            m_Hopper)
+    );
+         
+    m_subsystemController.povLeft().whileTrue(
+        new StartEndCommand(
+            () -> shooterMotor.useShooter(-10), 
+            () -> shooterMotor.useShooter(0),
+            shooterMotor)
+    );
+
+    m_subsystemController.y().whileTrue(
+        new StartEndCommand(
+            () -> m_Hopper.rollers(-1),
+            () -> m_Hopper.rollers(0), 
+            m_Hopper)
+    );
+
+//----------------------------- took out the shooter code------------------------------------------
+//shooter aim 
+//it works i think? hopefully
+    
+/*m_subsystemController.povUp().whileTrue(
+        new StartEndCommand(
+            () -> shooterArchMotor.useShooterArch(0.1), 
+            () -> shooterArchMotor.useShooterArch(0),
+            shooterArchMotor)
+    );
+
+m_subsystemController.povDown().whileTrue(
+        new StartEndCommand(
+            () -> shooterArchMotor.useShooterArch(-0.1), 
+            () -> shooterArchMotor.useShooterArch(0),
+            shooterArchMotor)  
+    );*/
+
+    // turns the base of the shooter
+/*m_subsystemController.povRight().whileTrue(
+        new StartEndCommand(
+            () -> shooterSusanMotor.useShooterSusan(0.1), 
+            () -> shooterSusanMotor.useShooterSusan(0),
+            shooterSusanMotor)  
+    );
+
+ m_subsystemController.povLeft().whileTrue(
+        new StartEndCommand(
+            () -> shooterSusanMotor.useShooterSusan(-0.1), 
+            () -> shooterSusanMotor.useShooterSusan(0),
+            shooterSusanMotor)  
+    );*/
+
+//grah
+
+//=============================================================================
+
+
+
+  }
+//i wanna cry
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+
+     //return new PathPlannerAuto("Back Up and Shoot");
+    /*
+    // Create config for trajectory
+    TrajectoryConfig config = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(DriveConstants.kDriveKinematics);
+
+    // An example trajectory to follow. All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        config);
+
+    var thetaController = new ProfiledPIDController(
+        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        exampleTrajectory,
+        m_robotDrive::getPose, // Functional interface to feed supplier
+        DriveConstants.kDriveKinematics,
+
+        // Position controllers
+        new PIDController(AutoConstants.kPXController, 0, 0),
+        new PIDController(AutoConstants.kPYController, 0, 0),
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    */
+
+    // Below, are the lines that trigger the auto we want. They're all off because we have no autos
+
+    //return new LeftAuto(m_robotDrive, 15);
+    //return new RightAuto(m_robotDrive, 15);
+    //return new AutoDriveForward(m_robotDrive, 15);
+    //return new MiddleAuto(m_robotDrive, 15);
+   return null;
+  }
+}
