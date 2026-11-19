@@ -46,41 +46,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 @SuppressWarnings("unused")
 public class Robot extends TimedRobot {
 
-
-  
- /*
-  private static final int deviceID=0;
-  private SparkMax m_motor;
-  private SparkClosedLoopController m_ClosedLoopController;
-  public double kP, kI, kD, Kiz, kMaxOutput, MinOutput;
-
-  /**
-   * A RelativeEncoder object is constructed using the GetEncoder() method on an
-   * existing SparkMax object. The assumed encoder type is the hall effect, 
-   * or a sensor type and counts per revolution cam be passed in to specify
-   * a different kind of sensor. Here, it's a quadrature encoder with 4096 CPR.
-   */
-  //private RelativeEncoder m_encoder; 
- 
-    //Original code below
-
-  CommandXboxController controller;
-  UsbCamera driveCam;
-  UsbCamera clawCam;
-  
-  VideoSink server;
-
-  private Command m_autonomousCommand;
-  private RobotContainer m_robotContainer;
-
-  //public DigitalInput elevatorStopTop;
-  //public DigitalInput elevatorStopBottom;
-
-  //boolean topLimitPressed;
-  //boolean bottomLimitPressed;
-
-  public CoreTalonFX m_shooterMotor;
-
   /** Called once at the beginning of the robot program. */
   public Robot() {
 
@@ -91,7 +56,7 @@ public class Robot extends TimedRobot {
 
     // The left motor is CCW+
     currentConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
-    
+
  //private RelativeEncoder m_encoder; 
     //driveCam = CameraServer.startAutomaticCapture(0);
     //clawCam = CameraServer.startAutomaticCapture(0);

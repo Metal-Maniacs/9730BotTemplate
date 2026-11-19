@@ -25,8 +25,6 @@ import edu.wpi.first.math.util.Units;
  */
 @SuppressWarnings("unused")
 public final class Constants {
-  public static final String limelightName = "limelight"; // Can someone double check this?
-
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
