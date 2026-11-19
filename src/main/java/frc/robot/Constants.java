@@ -27,7 +27,6 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final String limelightName = "limelight"; // Can someone double check this?
 
-
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -40,19 +39,18 @@ public final class Constants {
     public static final double kWheelBase = Units.inchesToMeters(23.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+      new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+      new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+      new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
+      new Translation2d(-kWheelBase / 2, kTrackWidth / 2)
+    );
         
-        // Angular offsets of the modules relative to the chassis in radians
+    // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2.0;
 
     public static final double kFrontRightChassisAngularOffset = Math.PI;
-    // added pi to fix the motor moving up, down, right, left
 
     public static final double kBackLeftChassisAngularOffset = 2 * Math.PI;
-    // added pi to fix the motor mpving up, right, down, left
    
     public static final double kBackRightChassisAngularOffset = (Math.PI / 2.0);
     

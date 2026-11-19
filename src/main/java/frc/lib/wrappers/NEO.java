@@ -614,7 +614,6 @@ public class NEO {
     return controlLoopController;
   }
 
-  // TODO setup status frames n shit
   // // Documentation:
   // //
   // https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces#periodic-status-frames
