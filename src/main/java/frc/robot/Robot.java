@@ -45,7 +45,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
  */
 @SuppressWarnings("unused")
 public class Robot extends TimedRobot {
-
+  private Command m_autonomousCommand;
+  private RobotContainer m_robotContainer;
+  
   /** Called once at the beginning of the robot program. */
   public Robot() {
 
@@ -56,15 +58,6 @@ public class Robot extends TimedRobot {
 
     // The left motor is CCW+
     currentConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
-
- //private RelativeEncoder m_encoder; 
-    //driveCam = CameraServer.startAutomaticCapture(0);
-    //clawCam = CameraServer.startAutomaticCapture(0);
-    //elevatorCam = CameraServer.startAutomaticCapture(2);
-
-   //driveCam.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    //clawCam.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    //elevatorCam.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
   }
 
   /**
@@ -84,7 +77,6 @@ public class Robot extends TimedRobot {
    * like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
    *
-   * <p>
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and
    * SmartDashboard integrated updating.
