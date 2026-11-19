@@ -20,7 +20,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;*/
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Hopper;
 //import frc.robot.subsystems.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,11 +37,6 @@ import frc.robot.Constants.DriveConstants;*/
 import frc.robot.Constants.OIConstants;
 //import frc.robot.commands.LeftAuto;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.commands.AutoDriveForward;
-import frc.robot.commands.ShooterCommand;
-//import frc.robot.commands.MiddleAuto;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Climb;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -55,16 +49,7 @@ public class RobotContainer {
  
   // The robot's subsystems
   final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  public final Hopper m_Hopper = new Hopper();
-  private final Shooter shooterMotor = new Shooter();
- // private final Shooter shooterSusanMotor = new Shooter();
- // private final Shooter shooterArchMotor = new Shooter();
-  //private final Hopper HopperExtend = new Hopper();
-  //private final Hopper HopperDeExtend = new Hopper();
- // private final Hopper HopperRoller = new Hopper();
-  private final Climb m_climb = new Climb();
 
- 
   private double climbmult = 1;
 
   // The driver's controller
@@ -81,9 +66,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-    // tell pathplanner what our shooter command is
-    NamedCommands.registerCommand("Shoot", new ShooterCommand(shooterMotor, 1));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -183,136 +165,7 @@ public class RobotContainer {
             m_robotDrive)
     );
 
-
-//--------------------------SUBSYSTEM CONTROLLER!!!!!!!!!!!---------------------------
-
-//================================CLIMB===============================
-// CLIMB works i think
-
-   m_subsystemController.a().whileTrue(
-        new StartEndCommand(
-            () -> m_climb.useClimb(.5), 
-            () -> m_climb.useClimb(0), 
-            m_climb)
-    );
-  
-m_subsystemController.b().whileTrue(
-        new StartEndCommand(
-            () -> m_climb.useClimb(-.5), 
-            () -> m_climb.useClimb(0), 
-            m_climb)
-    ); 
-//============================================================================
-    
-//=======================================HOPPER===============================
-    // Hopper extension control
-    // Might need to be modified
-    //changed half power to quarter pwr because testing
-
-    // changed hopper to extend 
-     m_subsystemController.rightBumper().whileTrue(
-        new StartEndCommand(
-            () -> m_Hopper.extend(0.25), 
-            () -> m_Hopper.extend(0), 
-            m_Hopper)
-    );
-
-    // this helps deextend
-    m_subsystemController.leftBumper().whileTrue(   
-        new StartEndCommand(
-            () -> m_Hopper.extend(-0.25), 
-            () -> m_Hopper.extend(0), 
-            m_Hopper)
-    );
-    
-     m_subsystemController.povUp().whileTrue(   
-        new StartEndCommand(
-           () -> m_Hopper.intake(-1), 
-            () -> m_Hopper.intake(0), 
-            m_Hopper)
-    );
-
-    //wahhh
-    m_subsystemController.povDown().whileTrue(   
-        new StartEndCommand(
-            () -> m_Hopper.intake(1), 
-            () -> m_Hopper.intake(0), 
-            m_Hopper)
-    );
-
- //==========================================================================
-
-//=========================WORKS AS A SHOOTER I THINK========================
-  
-       m_subsystemController.povRight().whileTrue(
-        new StartEndCommand(
-            () -> shooterMotor.useShooter(10),
-            () -> shooterMotor.useShooter(0), 
-            shooterMotor)
-    );
-    // they see me rollin
-      m_subsystemController.x().whileTrue(
-        new StartEndCommand(
-            () -> m_Hopper.rollers(1),
-            () -> m_Hopper.rollers(0), 
-            m_Hopper)
-    );
-         
-    m_subsystemController.povLeft().whileTrue(
-        new StartEndCommand(
-            () -> shooterMotor.useShooter(-10), 
-            () -> shooterMotor.useShooter(0),
-            shooterMotor)
-    );
-
-    m_subsystemController.y().whileTrue(
-        new StartEndCommand(
-            () -> m_Hopper.rollers(-1),
-            () -> m_Hopper.rollers(0), 
-            m_Hopper)
-    );
-
-//----------------------------- took out the shooter code------------------------------------------
-//shooter aim 
-//it works i think? hopefully
-    
-/*m_subsystemController.povUp().whileTrue(
-        new StartEndCommand(
-            () -> shooterArchMotor.useShooterArch(0.1), 
-            () -> shooterArchMotor.useShooterArch(0),
-            shooterArchMotor)
-    );
-
-m_subsystemController.povDown().whileTrue(
-        new StartEndCommand(
-            () -> shooterArchMotor.useShooterArch(-0.1), 
-            () -> shooterArchMotor.useShooterArch(0),
-            shooterArchMotor)  
-    );*/
-
-    // turns the base of the shooter
-/*m_subsystemController.povRight().whileTrue(
-        new StartEndCommand(
-            () -> shooterSusanMotor.useShooterSusan(0.1), 
-            () -> shooterSusanMotor.useShooterSusan(0),
-            shooterSusanMotor)  
-    );
-
- m_subsystemController.povLeft().whileTrue(
-        new StartEndCommand(
-            () -> shooterSusanMotor.useShooterSusan(-0.1), 
-            () -> shooterSusanMotor.useShooterSusan(0),
-            shooterSusanMotor)  
-    );*/
-
-//grah
-
-//=============================================================================
-
-
-
   }
-//i wanna cry
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

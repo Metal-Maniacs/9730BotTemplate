@@ -67,25 +67,6 @@ public final class Constants {
     public static final int kRearLeftTurningCanId = 2;
     public static final int kFrontRightTurningCanId = 4;
     public static final int kRearRightTurningCanId = 1;
-    
-    // HOPPER SPARK MAX CAN ID
-    public static final int kHopperCanId = 9;
-      // in and outtake
-
-    // HOPPER  SPARKMAX CAN ID 
-    public static final int kRollerHopperCanId = 15;
-    public static final int kExtendHopperCanId = 11;
-
-    // Shooter
-    public static final int SHOOTER_CAN_ID = 12;
-   // chnaged id to 12 so that it doesnt get confused with another 
-    
-   // public static final int kSusanShooterCanId = 12;
-   // public static final int kArchShooterCanId = 13;
-
-
-    public static final int kClimbCanId = 14;
-   // public static final int kClimberHelperId = 15;  
       
     public static final boolean kGyroReversed = false;
   }
